@@ -26,3 +26,10 @@ spring:
         jwt:
           issuer-uri: https://sts.windows.net/524de923-14d5-4e21-bbbf-525ca2e1ced7/
           jwk-set-uri: https://login.microsoftonline.com/524de923-14d5-4e21-bbbf-525ca2e1ced7/discovery/keys
+
+# Solo /actuator/health (healthcheck de Docker)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
