@@ -1,0 +1,28 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: ms-andesstay-audit
+
+  # Oracle Autonomous Database (OCI) con wallet mTLS. Secretos solo por variables de entorno.
+  # Tests: perfil "test" con H2 (src/test/resources/application-test.yaml)
+  datasource:
+    url: ${DB_URL:jdbc:oracle:thin:@andesstaydb_tp?TNS_ADMIN=C:/oracle/wallet_andesstay}
+    username: ${DB_USERNAME:ANDESSTAY_AUDIT}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 5
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://sts.windows.net/524de923-14d5-4e21-bbbf-525ca2e1ced7/
+          jwk-set-uri: https://login.microsoftonline.com/524de923-14d5-4e21-bbbf-525ca2e1ced7/discovery/keys
