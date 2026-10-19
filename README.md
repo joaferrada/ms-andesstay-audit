@@ -82,6 +82,18 @@ Claim `roles` -> `ROLE_*` (`security/JwtAuthConverter`), aplicados con `@PreAuth
 
 El POST lo llama reservations con el JWT del usuario que hizo la accion (un Cliente al crear su reserva, Admin/Operador al cambiar estados). No se expone en el BFF.
 
+## Docker
+
+`Dockerfile` multi-stage: build con `maven:3.9-eclipse-temurin-17` y runtime `eclipse-temurin:17-jre` con usuario no root, puerto **8086** y `JAVA_TOOL_OPTIONS=-XX:MaxRAMPercentage=75`. Se levanta junto al resto del backend con el compose unico de `infra` (ver su README):
+
+```powershell
+cd ..\infra
+docker compose up -d --build audit
+docker compose logs -f audit
+```
+
+En el compose usa el wallet montado en `/wallet` (solo lectura) con `DB_URL=jdbc:oracle:thin:@andesstaydb_tp?TNS_ADMIN=/wallet`, usuario `ANDESSTAY_AUDIT` y clave `AUDIT_DB_PASSWORD`. Healthcheck: `GET http://localhost:8086/actuator/health`.
+
 ## Tests
 
 ```powershell
